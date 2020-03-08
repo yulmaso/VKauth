@@ -16,7 +16,7 @@ import com.yulmaso.vkauth.di.injectViewModel
 import com.yulmaso.vkauth.util.*
 import javax.inject.Inject
 
-
+//TODO: handles back button incorrectly
 class PageFragment: BaseFragment() {
 
     @Inject
@@ -73,6 +73,7 @@ class PageFragment: BaseFragment() {
         return binding.root
     }
 
+    //TODO: throws 'navigation destination is unknown to this NavController'
     private fun navigateToAuth() =
         findNavController().navigate(R.id.action_pageFragment_to_authFragment)
 
