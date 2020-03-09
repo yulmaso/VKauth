@@ -5,7 +5,9 @@
     <string name="loginHint">Email или телефон</string>
     <string name="passwordHint">Пароль</string>
     <string name="friends">Друзья:</string>
+
     <string name="exit">Выход</string>
+    <string name="refresh">Обновить</string>
 
     <string name="auth_failed">Ошибка авторизации!</string>
     <string name="request_failed">Ошибка обновления!</string>

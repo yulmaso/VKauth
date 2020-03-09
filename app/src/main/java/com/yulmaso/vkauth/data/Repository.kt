@@ -1,7 +1,5 @@
 package com.yulmaso.vkauth.data
 
-import android.app.Application
-import android.content.Context.MODE_PRIVATE
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.vk.api.sdk.VK
@@ -17,10 +15,8 @@ import kotlin.random.Random
 
 @Singleton
 class Repository @Inject constructor(
-    private val application: Application
+    private val dataProvider: DataProvider
 ) {
-
-    var userId: Int? = null
 
     private val vkConnectionStateMLive = MutableLiveData<Int>()
     val vkConnectionState: LiveData<Int> = vkConnectionStateMLive
@@ -30,6 +26,14 @@ class Repository @Inject constructor(
 
     private val profileMLive = MutableLiveData<VKUser>()
     val profileInfo: LiveData<VKUser> = profileMLive
+
+    fun setUserId(userId: Int) = dataProvider.setUserId(userId)
+
+    fun getUserId() = dataProvider.getUserId()
+
+    fun setVkConnectionState(state: Int) {
+        vkConnectionStateMLive.value = state
+    }
 
     fun refreshFriends() {
         VK.execute(VKFriendsRequest(), object : VKApiCallback<List<VKUser>> {
@@ -49,7 +53,6 @@ class Repository @Inject constructor(
         if (id != 0) {
             VK.execute(VKUserRequest(id), object : VKApiCallback<VKUser> {
                 override fun fail(error: Exception) {
-                    vkConnectionStateMLive.value = STATE_ERROR
                     checkVkLogin()
                 }
 
@@ -69,14 +72,13 @@ class Repository @Inject constructor(
     fun checkVkLogin() {
         VK.addTokenExpiredHandler(tokenTracker)
         if (VK.isLoggedIn()) {
-            vkConnectionStateMLive.value = STATE_LOGGED_IN
-            if (userId == null) {
-                val id = application.getSharedPreferences(AUTH_PREFERENCES, MODE_PRIVATE)
-                    .getInt(VK_USER_ID, 0)
-                userId = id
-                refreshProfileInfo(id)
+            if (vkConnectionState.value == STATE_LOGGED_OUT ||
+                vkConnectionState.value == STATE_ERROR ||
+                vkConnectionState.value == null) {
+                refreshProfileInfo(getUserId())
                 refreshFriends()
             }
+            vkConnectionStateMLive.value = STATE_LOGGED_IN
         } else {
             vkConnectionStateMLive.value = STATE_LOGGED_OUT
         }
@@ -85,19 +87,22 @@ class Repository @Inject constructor(
     fun vkLogOut() {
         VK.logout()
         vkConnectionStateMLive.value = STATE_LOGGED_OUT
-        application.getSharedPreferences(AUTH_PREFERENCES, MODE_PRIVATE)
-            .edit().putInt(VK_USER_ID, 0).apply()
+        setUserId(0)
     }
 
     fun getFiveRandomFriends(users: List<VKUser>): List<VKUser> {
-        val list: MutableList<VKUser> = users.toMutableList()
-        val result: MutableList<VKUser> = ArrayList()
-        for (i in 1..5){
-            val position = Random.nextInt(0, list.size)
-            result.add(list[position])
-            list.remove(list[position])
+        return if (users.isNotEmpty()) {
+            val list: MutableList<VKUser> = users.toMutableList()
+            val result: MutableList<VKUser> = ArrayList()
+            for (i in 1..5) {
+                val position = Random.nextInt(0, list.size)
+                result.add(list[position])
+                list.remove(list[position])
+            }
+            result.toList()
+        } else {
+            users
         }
-        return result.toList()
     }
 
 }

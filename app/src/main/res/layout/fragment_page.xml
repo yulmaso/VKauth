@@ -55,7 +55,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:profileImage="@{image}"
-                            tools:src="@mipmap/default_user_image" />
+                            tools:src="@drawable/default_user_image" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -73,47 +73,6 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp">
-
-                    <ImageButton
-                        android:id="@+id/exit_btn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:background="@drawable/button_selector"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:onClick="@{viewModel::refresh}"
-                        android:text="@string/exit"
-                        app:layout_constraintEnd_toStartOf="@id/refresh_btn"
-                        app:layout_constraintHorizontal_chainStyle="spread_inside"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_refresh_black_24dp" />
-
-
-                    <ImageButton
-                        android:id="@+id/refresh_btn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:background="@drawable/button_selector"
-                        android:backgroundTint="@color/colorAccent"
-                        android:onClick="@{viewModel::vkLogOut}"
-                        android:text="@string/exit"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/exit_btn"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_exit" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
 
                 <TextView
                     android:layout_width="match_parent"
@@ -136,8 +95,6 @@
                     tools:listitem="@layout/item_friend" />
 
             </LinearLayout>
-
         </androidx.core.widget.NestedScrollView>
-
     </LinearLayout>
 </layout>

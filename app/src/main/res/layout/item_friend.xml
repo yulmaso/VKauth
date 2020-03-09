@@ -34,7 +34,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:profileImage="@{image}"
-                tools:src="@mipmap/default_user_image" />
+                tools:src="@drawable/default_user_image" />
 
             <TextView
                 android:id="@+id/friendName"
@@ -50,6 +50,5 @@
                 tools:text="Ирина Новожильцева" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.cardview.widget.CardView>
 </layout>

@@ -10,17 +10,19 @@ import com.yulmaso.vkauth.util.Signal
 import dagger.android.support.DaggerFragment
 import java.util.*
 
+/**Функционал получения команд от вьюмодели*/
 abstract class BaseFragment: DaggerFragment() {
 
-    //queue where fragment stores received signals
+    //очередь полученных сигналов (возможность получать сигналы от нескольких вьюмоделей)
     private val signalsQueue = LinkedList<Signal>()
 
+    //сюда по очереди помещаются сигналы на обработку
     private val internalSignalsEmitterMLive = MutableLiveData<Signal>()
     private val internalSignalsEmitter: LiveData<Signal> = internalSignalsEmitterMLive
 
     private var isProcessing: Boolean = false
 
-    //fragment receives commands from viewmodels here
+    //обзервер, получающий команды от вьюмодели
     private val externalSignalsObserver = Observer<Signal> { signal ->
         signalsQueue.add(signal)
         if (!isProcessing) {
@@ -37,6 +39,7 @@ abstract class BaseFragment: DaggerFragment() {
         }
     }
 
+    //здесь подключаем получающий обзервер к вьюмодели, и выполняющий обзервер к очереди на обработку
     protected fun setupSignalsObserver(
         signalsObserver: Observer<Signal>,
         viewModel: BaseViewModel

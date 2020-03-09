@@ -15,14 +15,20 @@ import com.yulmaso.vkauth.util.Signal.Companion.FLAG_CAUSES_NAVIGATION
 import com.yulmaso.vkauth.util.Signal.Companion.FLAG_REQUIRES_LOADING
 import java.util.*
 
+
+/**Функционал отправки сигналов фрагменту*/
 abstract class BaseViewModel(application: Application): AndroidViewModel(application) {
 
     val signature: String = this::class.java.name
+
+    //в ожидании подтверждения о выполнении от фрагмента
     private var isWaitingForAcknowledgement: Boolean = false
 
-    private val signalsQueue = LinkedList<Signal>() //queue the viewmodel emits
+    //очередь команд на отправку
+    private val signalsQueue = LinkedList<Signal>()
     private val signalsEmitterMLive = MutableLiveData<Signal>()
-    val signalsEmitter: LiveData<Signal> = signalsEmitterMLive //fragment observes this
+    //на это подписывается фрагмент
+    val signalsEmitter: LiveData<Signal> = signalsEmitterMLive
 
     open fun acknowledgeSignal(signal: Signal){
         if (signal.flags.contains(FLAG_CAUSES_NAVIGATION)){
@@ -33,6 +39,7 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
             pollNext()
     }
 
+    //сюда кидаем команду на отправку
     protected fun enqueueCommand(command: String, vararg flags: Int) {
         val flagsSet = flags.toCollection(ArraySet())
         if (flagsSet.contains(FLAG_REQUIRES_LOADING)) {

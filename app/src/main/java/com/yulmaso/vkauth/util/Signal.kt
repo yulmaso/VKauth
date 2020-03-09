@@ -2,7 +2,7 @@ package com.yulmaso.vkauth.util
 
 import android.util.ArraySet
 
-/**package for commands*/
+/**Упаковка для команды*/
 class Signal (
     val command: String,
     val signature: String,

@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKScope
@@ -28,10 +28,10 @@ class AuthFragment: BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel : AuthViewModel
 
+    //обзервер, выполняющий команды от вьюмодели
     private val signalsObserver = Observer<Signal> {
         when(it.signature){
             viewModel.signature -> {
-                Log.d(LOG_TAG, "AUTH FRAGMENT RECEIVED A COMMAND")
                 when(it.command) {
                     Commands.VK_LOGIN -> vkLogin()
                 }
@@ -58,28 +58,27 @@ class AuthFragment: BaseFragment() {
 
         viewModel.vkConnectionState.observe(viewLifecycleOwner, Observer {
             when (it) {
-                STATE_LOGGED_IN -> navigateForward()
-//                STATE_ERROR -> reportAuthFailed()
+                STATE_LOGGED_IN -> navigateUp()
+                STATE_ERROR -> reportAuthFailed()
             }
         })
 
         return binding.root
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(LOG_TAG, "on detach auth fragment")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            activity?.finish()
+        }
     }
 
     private fun vkLogin(){
-        Log.d(LOG_TAG, "on auth button click")
-
         //https://github.com/VKCOM/vk-android-sdk/issues/421 :C
         VK.login(activity as MainActivity, setOf(VKScope.FRIENDS))
     }
 
-    private fun navigateForward() =
-        findNavController().navigate(R.id.action_authFragment_to_pageFragment)
+    private fun navigateUp() = findNavController().navigateUp()
 
     private fun reportAuthFailed() =
         Toast.makeText(activity, R.string.auth_failed, Toast.LENGTH_SHORT).show()

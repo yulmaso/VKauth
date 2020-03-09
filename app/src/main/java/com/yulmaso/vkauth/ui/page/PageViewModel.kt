@@ -27,15 +27,19 @@ class PageViewModel @Inject constructor(
     private val repository: Repository
 ): BaseViewModel(application) {
 
+    init {
+        repository.checkVkLogin()
+    }
+
     val vkConnectionState = repository.vkConnectionState
     val friends = repository.friends
     val profileInfo = repository.profileInfo
 
-    fun refresh(view: View){
+    fun refresh(){
         repository.refreshFriends()
     }
 
-    fun vkLogOut(view: View){
+    fun vkLogOut(){
         repository.vkLogOut()
     }
 
