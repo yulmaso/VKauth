@@ -17,8 +17,6 @@ import javax.inject.Inject
 
 class PageFragment: BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel : PageViewModel
 
     lateinit var navController: NavController

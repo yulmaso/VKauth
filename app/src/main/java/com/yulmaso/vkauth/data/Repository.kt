@@ -72,9 +72,7 @@ class Repository @Inject constructor(
     fun checkVkLogin() {
         VK.addTokenExpiredHandler(tokenTracker)
         if (VK.isLoggedIn()) {
-            if (vkConnectionState.value == STATE_LOGGED_OUT ||
-                vkConnectionState.value == STATE_ERROR ||
-                vkConnectionState.value == null) {
+            if (vkConnectionState.value != STATE_LOGGED_IN) {
                 refreshProfileInfo(getUserId())
                 refreshFriends()
             }

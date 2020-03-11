@@ -42,9 +42,7 @@ class MainActivity : DaggerAppCompatActivity() {
         nav_host_fragment.findNavController().addOnDestinationChangedListener {
             _, destination, _ -> when (destination.id) {
             R.id.authFragment2 -> toolbar.visibility = View.GONE
-            R.id.pageFragment2 -> {
-                toolbar.visibility = View.VISIBLE
-            }
+            R.id.pageFragment2 -> toolbar.visibility = View.VISIBLE
         }
         }
     }

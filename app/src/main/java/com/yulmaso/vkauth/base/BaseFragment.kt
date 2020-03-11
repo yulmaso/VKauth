@@ -5,13 +5,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.yulmaso.vkauth.util.LOG_TAG
 import com.yulmaso.vkauth.util.Signal
 import dagger.android.support.DaggerFragment
 import java.util.*
+import javax.inject.Inject
 
 /**Функционал получения команд от вьюмодели*/
 abstract class BaseFragment: DaggerFragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     //очередь полученных сигналов (возможность получать сигналы от нескольких вьюмоделей)
     private val signalsQueue = LinkedList<Signal>()

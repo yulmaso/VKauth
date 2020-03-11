@@ -24,8 +24,6 @@ import javax.inject.Inject
 
 class AuthFragment: BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel : AuthViewModel
 
     //обзервер, выполняющий команды от вьюмодели
